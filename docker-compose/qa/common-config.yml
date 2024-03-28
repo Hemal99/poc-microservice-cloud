@@ -3,6 +3,21 @@ services:
     networks:
       - hemalbank
 
+  microservice-db-config:
+    extends:
+      service: network-deploy-service
+    image: postgres:15
+    healthcheck:
+      test: pg_isready -U accounts
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "hemal1999"
+
+
   microservice-base-config:
     extends:
       service: network-deploy-service #any microservice will extend this service
@@ -19,3 +34,5 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: qa
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: hemal1999
